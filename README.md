@@ -22,6 +22,7 @@ Snapmark isn't on the Chrome Web Store, so it's installed as an unpacked extensi
 3. Enable **Developer mode** (toggle in the top-right corner).
 4. Click **Load unpacked** and select the `dist/` folder inside this project.
 5. The Snapmark icon appears in your toolbar — pin it for easy access.
+6. Set up image uploads — see [Image uploads (imgBB)](#image-uploads-imgbb) below to host screenshots instead of embedding base64.
 
 Whenever the code changes and you rebuild, click the refresh icon on the Snapmark card on the extensions page to pick up the new `dist/` contents.
 
@@ -86,8 +87,19 @@ See [Installation](#installation) above — load the `dist/` folder you just bui
 - Switch between **Inspect** (click elements) and **Area** (drag to select) modes from the floating toolbar.
 - Click the list icon to view, delete, or clear annotations.
 - Click the copy icon to copy all annotations as Markdown to your clipboard.
-- Click the sliders icon (or the extension's **Settings** button in the popup) to set an optional imgBB API key for hosted screenshot URLs — get a free key at [api.imgbb.com](https://api.imgbb.com/).
+- Click the sliders icon to open the inline settings dropup and set an optional imgBB API key for hosted screenshot URLs — see [Image uploads](#image-uploads-imgbb) below.
 - Press `Esc` or use the minimize button to collapse the toolbar without losing annotations.
+
+## Image uploads (imgBB)
+
+By default, screenshots are embedded as base64 in the Markdown export. To get hosted image URLs instead, connect a free [imgBB](https://imgbb.com) account:
+
+1. Create an account at [imgbb.com](https://imgbb.com).
+2. Go to [imgbb.com/api](https://imgbb.com/api) and grab your API key.
+3. In the page you're annotating, activate Snapmark and click the sliders icon on the floating toolbar to open the settings dropup.
+4. Paste the key into the **API key** field and click **Save**.
+
+Once saved, new screenshots are uploaded to imgBB automatically and the Markdown export uses the hosted URLs. Click **Clear** in the same dropup to remove the key and go back to embedded base64 images.
 
 ## Project structure
 

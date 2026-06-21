@@ -124,13 +124,14 @@ export function FloatingToolbar({
   onCopyMarkdown,
 }: FloatingToolbarProps) {
   const [showPanel, setShowPanel] = useState(false)
+  const [showSettings, setShowSettings] = useState(false)
   const [pos, setPos] = useState<{ x: number; y: number } | null>(null)
   const [isDragging, setIsDragging] = useState(false)
   const dragRef = useRef<{ mx: number; my: number; tx: number; ty: number } | null>(null)
   const justDragged = useRef(false)
 
   useEffect(() => { setPos(getInitialPosition()) }, [])
-  useEffect(() => { if (!isActive) setShowPanel(false) }, [isActive])
+  useEffect(() => { if (!isActive) { setShowPanel(false); setShowSettings(false) } }, [isActive])
 
   useEffect(() => {
     const handler = () => setPos((p) => p ? clampPos(p) : p)
@@ -199,6 +200,8 @@ export function FloatingToolbar({
         />
       )}
 
+      {showSettings && isActive && <SettingsPanel />}
+
       <div className={`dqa-pill${isActive ? ' dqa-pill-expanded' : ' dqa-pill-collapsed'}`}>
         {!isActive ? (
           <button
@@ -254,7 +257,7 @@ export function FloatingToolbar({
             <DQATooltip text="View annotations">
               <button
                 className={`dqa-pill-btn${showPanel ? ' dqa-active' : ''}`}
-                onClick={() => setShowPanel((v) => !v)}
+                onClick={() => { setShowPanel((v) => !v); setShowSettings(false) }}
               >
                 <ListIcon />
                 {annotations.length > 0 && (
@@ -273,8 +276,8 @@ export function FloatingToolbar({
 
             <DQATooltip text="imgBB settings">
               <button
-                className="dqa-pill-btn"
-                onClick={() => chrome.runtime.sendMessage({ type: 'OPEN_OPTIONS' })}
+                className={`dqa-pill-btn${showSettings ? ' dqa-active' : ''}`}
+                onClick={() => { setShowSettings((v) => !v); setShowPanel(false) }}
               >
                 <SlidersIcon />
               </button>
@@ -354,6 +357,74 @@ function AnnotationsPanel({ annotations, onDelete, onClearAll, onCopyMarkdown }:
           </button>
         </div>
       )}
+    </div>
+  )
+}
+
+// ── Settings panel ───────────────────────────────────────────────────────────
+
+function SettingsPanel() {
+  const [apiKey, setApiKey] = useState('')
+  const [revealed, setRevealed] = useState(false)
+  const [status, setStatus] = useState<{ text: string; tone: 'ok' | 'error' | 'neutral' } | null>(null)
+  const statusTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    chrome.storage.sync.get('imgbbApiKey', (result) => {
+      if (result.imgbbApiKey) setApiKey(result.imgbbApiKey)
+    })
+    return () => { if (statusTimer.current) clearTimeout(statusTimer.current) }
+  }, [])
+
+  const flashStatus = (text: string, tone: 'ok' | 'error' | 'neutral') => {
+    setStatus({ text, tone })
+    if (statusTimer.current) clearTimeout(statusTimer.current)
+    statusTimer.current = setTimeout(() => setStatus(null), 2000)
+  }
+
+  const handleSave = () => {
+    const key = apiKey.trim()
+    if (!key) {
+      flashStatus('Enter a key first', 'error')
+      return
+    }
+    chrome.storage.sync.set({ imgbbApiKey: key }, () => flashStatus('Saved', 'ok'))
+  }
+
+  const handleClear = () => {
+    setApiKey('')
+    chrome.storage.sync.remove('imgbbApiKey', () => flashStatus('Cleared', 'neutral'))
+  }
+
+  return (
+    <div className="dqa-panel dqa-settings-panel">
+      <div className="dqa-panel-header">
+        <span className="dqa-panel-title">imgBB API Key</span>
+        {status && (
+          <span className={`dqa-settings-status dqa-settings-status-${status.tone}`}>{status.text}</span>
+        )}
+      </div>
+
+      <div className="dqa-settings-body">
+        <div className="dqa-settings-input-row">
+          <input
+            className="dqa-settings-input"
+            type={revealed ? 'text' : 'password'}
+            value={apiKey}
+            onChange={(e) => setApiKey(e.target.value)}
+            placeholder="Paste your imgBB API key"
+            spellCheck={false}
+          />
+          <button className="dqa-settings-reveal-btn" onClick={() => setRevealed((v) => !v)}>
+            {revealed ? 'Hide' : 'Show'}
+          </button>
+        </div>
+
+        <div className="dqa-settings-actions">
+          <button className="dqa-settings-clear-btn" onClick={handleClear}>Clear</button>
+          <button className="dqa-settings-save-btn" onClick={handleSave}>Save</button>
+        </div>
+      </div>
     </div>
   )
 }
