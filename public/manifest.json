@@ -1,0 +1,24 @@
+{
+  "manifest_version": 3,
+  "name": "Snapmark",
+  "version": "1.0.0",
+  "description": "Design QA annotation tool for any webpage. Activate with Cmd+Shift+A.",
+  "permissions": ["activeTab", "scripting", "storage", "tabs"],
+  "host_permissions": ["<all_urls>"],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "action": {
+    "default_popup": "popup/index.html",
+    "default_title": "Snapmark Design QA"
+  },
+  "options_page": "options/index.html"
+}

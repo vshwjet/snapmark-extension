@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Snapmark</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-width: 240px;
+      padding: 16px;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #1a1a1a;
+      color: #fff;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .logo {
+      width: 28px;
+      height: 28px;
+      background: #0088FF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+    }
+    p {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    kbd {
+      display: inline-block;
+      padding: 1px 5px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 4px;
+      font-size: 11px;
+      font-family: inherit;
+      color: rgba(255,255,255,0.8);
+    }
+    .btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    button {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.7);
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+    }
+    button:hover {
+      background: rgba(255,255,255,0.1);
+      color: #fff;
+    }
+    #activate-btn {
+      background: #0088FF;
+      border-color: #0088FF;
+      color: #fff;
+    }
+    #activate-btn:hover {
+      background: #0077ee;
+      border-color: #0077ee;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <svg width="16" height="16" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="2" y="2" width="14" height="10" rx="2.5" stroke="white" stroke-width="1.5"/>
+        <path d="M6 16l2.5-3.5h1L12 16" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <line x1="5" y1="5.5" x2="13" y2="5.5" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
+        <line x1="5" y1="8.5" x2="10" y2="8.5" stroke="white" stroke-width="1.3" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <h1>Snapmark</h1>
+  </div>
+  <p>
+    Click "Activate" to start annotating this page.
+    Once active, click elements or drag to add annotations, then copy as Markdown.
+  </p>
+  <div class="btn-group">
+    <button id="activate-btn">Activate on this page</button>
+    <button id="settings-btn">Settings</button>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

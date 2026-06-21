@@ -1,0 +1,20 @@
+{
+  "name": "snapmark-extension",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build && vite build --config vite.background.config.ts",
+    "dev": "vite build --watch & vite build --config vite.background.config.ts --watch",
+    "zip": "cd dist && zip -r ../snapmark-extension.zip . -x '*.DS_Store'"
+  },
+  "devDependencies": {
+    "@types/chrome": "^0.0.270",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "typescript": "^5.6.2",
+    "vite": "^5.4.8"
+  }
+}
